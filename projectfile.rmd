@@ -61,9 +61,9 @@ Reducing the NZV, NA variables from data
 NZV <- nearZeroVar(TrainSet)
 TrainSet <- TrainSet[, -NZV]
 TestSet  <- TestSet[, -NZV]
-NA    <- sapply(TrainSet, function(x) mean(is.na(x))) > 0.95
-TrainSet <- TrainSet[, NA==FALSE]
-TestSet  <- TestSet[, NA==FALSE]
+allNA    <- sapply(TrainSet, function(x) mean(is.na(x))) > 0.95
+TrainSet <- TrainSet[, allNA==FALSE]
+TestSet  <- TestSet[, allNA==FALSE]
 ```
 # removing variables which doesn't make sense for prediction
 
@@ -81,23 +81,37 @@ dim(TestSet)
 
 The goal of this project is to be able to predict the manner in which a barbell lift was done. I will use a random forest and Decision Tree methods make this prediction, and use best results to answer the quiz. 
 
-### Random Forests
+### Random Forests Methos
 
 ```{r}
 modelB1 <- randomForest(classe ~. , data=TrainSet)
 ```
 ```{r}
-predictionsB1 <- predict(modFitB1, TestSet, type = "class")
+predictionsB1 <- predict(modelB1, TestSet, type = "class")
 ```
 ```{r}
 confusionMatrix(predictionsB1, TestSet$classe)
 ```
+
+### Decision Tree Methos
+
+```{r}
+modelDecTree <- rpart(classe ~ ., data=TrainSet, method="class")
+fancyRpartPlot(modelDecTree)
+{r}
+
+
+# prediction on Test dataset
+```{r}
+predictDecTree <- predict(modelDecTree, newdata=TestSet, type="class")
+confMatDecTree <- confusionMatrix(predictDecTree, TestSet$classe)
+confMatDecTree
+{r}
+
 # plot matrix results
 ```{r}
-plot(confusionMatrix$table, col = confusionMatrix$byClass, 
-     main = paste("Random Forest - Accuracy =",
-                  round(confusionMatrix$overall['Accuracy'], 4)))
+plot(confMatDecTree$table, col = confMatDecTree$byClass, 
+     main = paste("Decision Tree - Accuracy =",
+                  round(confMatDecTree$overall['Accuracy'], 4)))
 ```
-
-
                   
