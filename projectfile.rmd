@@ -86,6 +86,8 @@ The goal of this project is to be able to predict the manner in which a barbell 
 ```{r}
 modelB1 <- randomForest(classe ~. , data=TrainSet)
 ```
+# prediction on Test dataset
+
 ```{r}
 predictionsB1 <- predict(modelB1, TestSet, type = "class")
 ```
@@ -98,20 +100,18 @@ confusionMatrix(predictionsB1, TestSet$classe)
 ```{r}
 modelDecTree <- rpart(classe ~ ., data=TrainSet, method="class")
 fancyRpartPlot(modelDecTree)
-{r}
+```
 
-
-# prediction on Test dataset
+# Prediction on Test dataset
 ```{r}
 predictDecTree <- predict(modelDecTree, newdata=TestSet, type="class")
 confMatDecTree <- confusionMatrix(predictDecTree, TestSet$classe)
 confMatDecTree
-{r}
-
-# plot matrix results
-```{r}
-plot(confMatDecTree$table, col = confMatDecTree$byClass, 
-     main = paste("Decision Tree - Accuracy =",
-                  round(confMatDecTree$overall['Accuracy'], 4)))
 ```
-                  
+
+### Generating files to submit assignmnet
+
+```{r}
+predictTEST <- predict(modelB1, newdata=testing)
+predictTEST
+```
