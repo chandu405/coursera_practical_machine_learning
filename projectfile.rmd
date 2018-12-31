@@ -92,4 +92,12 @@ predictionsB1 <- predict(modFitB1, TestSet, type = "class")
 ```{r}
 confusionMatrix(predictionsB1, TestSet$classe)
 ```
+# plot matrix results
+```{r}
+plot(confusionMatrix$table, col = confusionMatrix$byClass, 
+     main = paste("Random Forest - Accuracy =",
+                  round(confusionMatrix$overall['Accuracy'], 4)))
+```
 
+
+                  
